@@ -49,10 +49,10 @@ export interface ExampleSchema {
 
 ```sh
 # Using Yarn:
-yarn add json-schema-to-typescript
+yarn add sm-json-transform
 
 # Or, using NPM:
-npm install json-schema-to-typescript --save
+npm install sm-json-transform --save
 ```
 
 ## Usage
