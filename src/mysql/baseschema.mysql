@@ -1,0 +1,64 @@
+CREATE TABLE generic (
+  id TEXT,
+  title TEXT,
+  type TEXT,
+  additionalProperties BOOLEAN,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE generic_properties (
+  generic_id TEXT,
+  id TEXT,
+  PRIMARY KEY (id),
+  FOREIGN KEY (generic_id) REFERENCES generic(id)
+);
+
+CREATE TABLE generic_properties_firstName (
+  generic_properties_id TEXT,
+  id TEXT,
+  type TEXT,
+  PRIMARY KEY (id),
+  FOREIGN KEY (generic_properties_id) REFERENCES generic_properties(id)
+);
+
+CREATE TABLE generic_properties_lastName (
+  generic_properties_id TEXT,
+  id TEXT,
+  type TEXT,
+  PRIMARY KEY (id),
+  FOREIGN KEY (generic_properties_id) REFERENCES generic_properties(id)
+);
+
+CREATE TABLE generic_properties_age (
+  generic_properties_id TEXT,
+  id TEXT,
+  description TEXT,
+  type TEXT,
+  minimum INT,
+  PRIMARY KEY (id),
+  FOREIGN KEY (generic_properties_id) REFERENCES generic_properties(id)
+);
+
+CREATE TABLE generic_properties_hairColor (
+  generic_properties_id TEXT,
+  id TEXT,
+  type TEXT,
+  PRIMARY KEY (id),
+  FOREIGN KEY (generic_properties_id) REFERENCES generic_properties(id)
+);
+
+CREATE TABLE generic_properties_hairColor_enum (
+  generic_properties_hairColor_id TEXT,
+  id TEXT,
+  value TEXT,
+  PRIMARY KEY (id),
+  FOREIGN KEY (generic_properties_hairColor_id) REFERENCES generic_properties_hairColor(id)
+);
+
+CREATE TABLE generic_required (
+  generic_id TEXT,
+  id TEXT,
+  value TEXT,
+  PRIMARY KEY (id),
+  FOREIGN KEY (generic_id) REFERENCES generic(id)
+);
