@@ -1,0 +1,39 @@
+{
+	$schema: 'http://json-schema.org/draft-04/schema#',
+	type: 'object',
+	properties: {
+		companyId: {
+			type: 'string'
+		},
+		appId: {
+			type: 'string'
+		},
+		questionId: {
+			type: 'string'
+		},
+		userId: {
+			type: 'string'
+		},
+		clientId: {
+			type: 'string'
+		},
+		answer: {
+			type: 'string'
+		},
+		key: {
+			type: 'string'
+		},
+		dateCreated: {
+			type: 'number'
+		},
+		dateUpdated: {
+			type: 'number'
+		},
+		lastCreatedBy: {
+			type: 'string'
+		},
+		lastUpdatedBy: {
+			type: 'string'
+		}
+	}
+}

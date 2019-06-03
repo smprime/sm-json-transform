@@ -1,50 +1,62 @@
-import * as gulp from 'gulp';
-import * as clean from 'gulp-clean';
-import * as conflict from 'gulp-conflict';
-import * as stringify from 'stringify-object';
-import * as changeCase from 'change-case';
-import * as path from 'path';
-import * as glob from 'glob';
-import * as rename from 'gulp-rename';
-import * as through from 'through2';
-import * as generate from 'generate-schema';
-import { compile } from 'json-schema-to-typescript';
+import * as changeCase from 'change-case'
+import * as generate from 'generate-schema'
+import * as glob from 'glob'
+import * as gulp from 'gulp'
+import * as clean from 'gulp-clean'
+import * as conflict from 'gulp-conflict'
+import * as rename from 'gulp-rename'
+import { compile } from 'json-schema-to-typescript'
+import * as path from 'path'
+import * as stringify from 'stringify-object'
+import * as through from 'through2'
 
 const paths = {
     files: ['src/schemas/*.js*'],
     dest: ['dist/'],
     modsrc: ['src/models'],
     mysqlsrc: ['src/mysql'],
+    jsonsrc: ['src/jsonSchema'],
     tssrc: ['src/interfaces'],
     src: ['src/']
 };
 
 const checkFileError = file => {
     if (file.isNull()) {
-        return file;
+        return file
     }
     if (file.isStream()) {
-        return 'Streams not supported!!';
+        return 'Streams not supported!!'
     }
 
-    return null;
+    return null
 };
+const TransformJsonSchema = () =>
+    through.obj(async (file, encoding, callback) => {
+
+        let fileData = generate.json(JSON.parse(file.contents.toString()));
+
+        file.contents = Buffer.from(stringify(fileData));
+        callback(checkFileError(file), file)
+    });
 const TransformJsonTs = () =>
     through.obj(async (file, encoding, callback) => {
 
-        let fileData = await compile(JSON.parse(file.contents.toString()),'');
+        let {name, ext} = path.parse(file.path);
+        let fileData = generate.json(JSON.parse(file.contents.toString()));
+        let ts = await compile(fileData, changeCase.pascalCase(name));
 
-        file.contents = Buffer.from(fileData.toString());
-        callback(checkFileError(file), file);
+        file.contents = Buffer.from(ts.toString());
+        callback(checkFileError(file), file)
     });
+
 
 const TransformJsonMysql = () =>
     through.obj(async (file, encoding, callback) => {
-
-        let fileData = await generate.mysql(JSON.parse(file.contents.toString()));
+        let content = JSON.parse(file.contents.toString());
+        let fileData = await generate.mysql(content);
 
         file.contents = Buffer.from(fileData.toString());
-        callback(checkFileError(file), file);
+        callback(checkFileError(file), file)
     });
 
 const TransformJsonModels = () =>
@@ -58,14 +70,14 @@ const TransformJsonModels = () =>
         let fileData = await generate.mongoose(content);
         let schema = stringify(fileData);
         console.log('coding - >', changeCase.pascalCase(name));
-        let str = `const mongoose from 'mongoose');\n`;
+        let str = `const mongoose = require('mongoose');\n`;
         str += `const { Schema } = mongoose;\n`;
         str += `const { ObjectId } = Schema.Types;\n\n`;
         str += `const ${schemaName} = Schema(${schema}) \n\n`;
         str += `module.exports = mongoose.model('${refName}', ${schemaName}, '${refName}');`;
 
         file.contents = Buffer.from(str);
-        callback(checkFileError(file), file);
+        callback(checkFileError(file), file)
     });
 
 const GenerateIndices = () =>
@@ -80,18 +92,18 @@ const GenerateIndices = () =>
         files.forEach(f => {
             let {name, ext} = path.parse(f);
             if (name === 'index' && ext === '.js') {
-                return;
+                return
             }
             const rname = dash.test(name) ? changeCase.pascalCase(name) : name;
             exportNames.push(rname);
             if (ext !== '.js') {
-                name = `${name}${ext}`;
+                name = `${name}${ext}`
             }
-            str += `import ${rname} from './${name}';\n`;
+            str += `const ${rname} = './${name}';\n`
         });
         str += `\n\nmodule.exports = {\n    ${exportNames.join(',\n    ')} \n};\n\n`;
         file.contents = new Buffer(str);
-        callback(checkFileError(file), file);
+        callback(checkFileError(file), file)
     });
 
 const GenerateOperations =  () => {
@@ -106,28 +118,27 @@ const GenerateOperations =  () => {
         str += `const mongoose = require('mongoose');\n`;
         str += `const fs = require('fs');\n`;
         str += `const path = require('path');\n`;
-        str += `const configData = fs.readFileSync(path.resolve(__dirname, './config.json'));\n`;
+        str += `const configData = fs.readFileSync(path.resolve(__dirname, '../../lib/config/config.json'));\n`;
         str += `const config = JSON.parse(configData);\n`;
         str += `mongoose.connect(config.mongodbConnection);\n\n`;
         str += `const model = {};\n\n`;
         files.forEach( f => {
             let { name, ext } = path.parse(f);
-            if( name === 'index' && ext === '.js' ) {
-                return;
+            if ( name === 'index' && ext === '.js' ) {
+                return
             }
             const rname = dash.test(name) ? changeCase.pascalCase(name) : name;
             exportNames.push(rname);
-            str += `model.${rname} = require('./models').${rname};\n`;
+            str += `model.${rname} = require('./models/${rname}');\n`
         });
         str += `\n\nexports.model = model;\n`;
         str += `exports.fileSystem = fs;\n`;
         str += `exports.mongoose = mongoose;\n`;
 
         file.contents = new Buffer(str);
-        callback(null, file);
-    });
+        callback(null, file)
+    })
 };
-
 
 gulp.task('clean', () => gulp.src(paths.dest, {allowEmpty: true})
     .pipe(clean())
@@ -143,6 +154,12 @@ gulp.task('json2ts', () =>
         .pipe(TransformJsonTs())
         .pipe(rename(paths => paths.extname = '.ts'))
         .pipe(gulp.dest(paths.tssrc))
+)
+gulp.task('JsonSchema', () =>
+    gulp.src(paths.files)
+        .pipe(TransformJsonSchema())
+        .pipe(rename(paths => paths.extname = '.json'))
+        .pipe(gulp.dest(paths.jsonsrc))
 );
 gulp.task('json2Mysql', () =>
     gulp.src(paths.files)
@@ -169,4 +186,4 @@ gulp.task('generate-Operations', () =>
         .pipe(conflict('./dist/**/*'))
         .pipe(gulp.dest(paths.dest))
 );
-gulp.task('default', gulp.series('clean', 'json2ts', 'json2Mysql', 'json2Models', 'copy', 'generate-indices','generate-Operations'));
+gulp.task('default', gulp.series('clean', 'json2ts', 'JsonSchema', 'json2Mysql', 'json2Models', 'copy', 'generate-indices', 'generate-Operations'));
