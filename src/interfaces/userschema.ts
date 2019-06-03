@@ -6,16 +6,24 @@
  */
 
 export interface Userschema {
-  companyId?: string;
-  appId?: string;
-  questionId?: string;
-  userId?: string;
-  clientId?: string;
-  answer?: string;
-  key?: string;
-  dateCreated?: number;
-  dateUpdated?: number;
-  lastCreatedBy?: string;
-  lastUpdatedBy?: string;
+  firstName?: {
+    type?: string;
+    [k: string]: any;
+  };
+  lastName?: {
+    type?: string;
+    [k: string]: any;
+  };
+  age?: {
+    description?: string;
+    type?: string;
+    minimum?: number;
+    [k: string]: any;
+  };
+  hairColor?: {
+    enum?: string[];
+    type?: string;
+    [k: string]: any;
+  };
   [k: string]: any;
 }

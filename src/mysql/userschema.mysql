@@ -1,15 +1,46 @@
 CREATE TABLE generic (
   id TEXT,
-  companyId TEXT,
-  appId TEXT,
-  questionId TEXT,
-  userId TEXT,
-  clientId TEXT,
-  answer TEXT,
-  key TEXT,
-  dateCreated INT,
-  dateUpdated INT,
-  lastCreatedBy TEXT,
-  lastUpdatedBy TEXT,
   PRIMARY KEY (id)
+);
+
+CREATE TABLE generic_firstName (
+  generic_id TEXT,
+  id TEXT,
+  type TEXT,
+  PRIMARY KEY (id),
+  FOREIGN KEY (generic_id) REFERENCES generic(id)
+);
+
+CREATE TABLE generic_lastName (
+  generic_id TEXT,
+  id TEXT,
+  type TEXT,
+  PRIMARY KEY (id),
+  FOREIGN KEY (generic_id) REFERENCES generic(id)
+);
+
+CREATE TABLE generic_age (
+  generic_id TEXT,
+  id TEXT,
+  description TEXT,
+  type TEXT,
+  minimum INT,
+  PRIMARY KEY (id),
+  FOREIGN KEY (generic_id) REFERENCES generic(id)
+);
+
+CREATE TABLE generic_hairColor (
+  generic_id TEXT,
+  id TEXT,
+  type TEXT,
+  PRIMARY KEY (id),
+  FOREIGN KEY (generic_id) REFERENCES generic(id)
+);
+
+CREATE TABLE generic_hairColor_enum (
+  generic_hairColor_id TEXT,
+  id TEXT,
+  value TEXT,
+  PRIMARY KEY (id),
+  FOREIGN KEY (generic_hairColor_id) REFERENCES generic_hairColor(id)
 );

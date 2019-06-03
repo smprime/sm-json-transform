@@ -8,41 +8,69 @@ Gulp JSON Transformations
 Schema/${yourSchema}:
 ```json
 {
-  "title": "Example Schema",
-  "type": "object",
-  "properties": {
-    "firstName": {
-      "type": "string"
-    },
-    "lastName": {
-      "type": "string"
-    },
-    "age": {
-      "description": "Age in years",
-      "type": "integer",
-      "minimum": 0
-    },
-    "hairColor": {
-      "enum": ["black", "brown", "blue"],
-      "type": "string"
-    }
+  "firstName": {
+    "type": "string"
   },
-  "additionalProperties": false,
-  "required": ["firstName", "lastName"]
+  "lastName": {
+    "type": "string"
+  },
+  "age": {
+    "description": "Age in years",
+    "type": "integer",
+    "minimum": 0
+  },
+  "hairColor": {
+    "enum": [
+      "black",
+      "brown",
+      "blue"
+    ],
+    "type": "string"
+  }
 }
 ```
 
 Output:!!!!
 ```ts
-export interface ExampleSchema {
-  firstName: string;
-  lastName: string;
-  /**
-   * Age in years
-   */
-  age?: number;
-  hairColor?: "black" | "brown" | "blue";
-}
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
+const { ObjectId } = Schema.Types;
+
+const ${yourSchema} = Schema({
+	firstName: {
+		type: {
+			type: 'String'
+		}
+	},
+	lastName: {
+		type: {
+			type: 'String'
+		}
+	},
+	age: {
+		description: {
+			type: 'String'
+		},
+		type: {
+			type: 'String'
+		},
+		minimum: {
+			type: 'Number'
+		}
+	},
+	hairColor: {
+		enum: {
+			type: [
+				'String'
+			]
+		},
+		type: {
+			type: 'String'
+		}
+	}
+}) 
+
+module.exports = mongoose.model(${yourSchema}, ${yourSchema}, ${yourSchema});
 ```
 
 ## Installation
@@ -61,22 +89,18 @@ npm install sm-json-transform --save
 import { transform } from 'sm-json-transform'
 
 // compile from file
-transform('foo.json')
-  .then(ts => fs.writeFileSync('foo.d.ts', ts))
+transform()
+  
 
 // or, compile a JS object
-let mySchema = {
-  properties: [...]
-}
-compile(mySchema, 'MySchema')
-  .then(ts => ...)
+transform()
 ```
 
 
 ## Build
 
-`npm Gulp`
+`npm run build`
 
 ## Tests
 
-`npm test`
+`npm run test`

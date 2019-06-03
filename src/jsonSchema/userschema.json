@@ -2,38 +2,49 @@
 	$schema: 'http://json-schema.org/draft-04/schema#',
 	type: 'object',
 	properties: {
-		companyId: {
-			type: 'string'
+		firstName: {
+			type: 'object',
+			properties: {
+				type: {
+					type: 'string'
+				}
+			}
 		},
-		appId: {
-			type: 'string'
+		lastName: {
+			type: 'object',
+			properties: {
+				type: {
+					type: 'string'
+				}
+			}
 		},
-		questionId: {
-			type: 'string'
+		age: {
+			type: 'object',
+			properties: {
+				description: {
+					type: 'string'
+				},
+				type: {
+					type: 'string'
+				},
+				minimum: {
+					type: 'number'
+				}
+			}
 		},
-		userId: {
-			type: 'string'
-		},
-		clientId: {
-			type: 'string'
-		},
-		answer: {
-			type: 'string'
-		},
-		key: {
-			type: 'string'
-		},
-		dateCreated: {
-			type: 'number'
-		},
-		dateUpdated: {
-			type: 'number'
-		},
-		lastCreatedBy: {
-			type: 'string'
-		},
-		lastUpdatedBy: {
-			type: 'string'
+		hairColor: {
+			type: 'object',
+			properties: {
+				enum: {
+					type: 'array',
+					items: {
+						type: 'string'
+					}
+				},
+				type: {
+					type: 'string'
+				}
+			}
 		}
 	}
 }

@@ -3,38 +3,36 @@ const { Schema } = mongoose;
 const { ObjectId } = Schema.Types;
 
 const userschemaSchema = Schema({
-	companyId: {
-		type: 'ObjectId'
+	firstName: {
+		type: {
+			type: 'String'
+		}
 	},
-	appId: {
-		type: 'ObjectId'
+	lastName: {
+		type: {
+			type: 'String'
+		}
 	},
-	questionId: {
-		type: 'ObjectId'
+	age: {
+		description: {
+			type: 'String'
+		},
+		type: {
+			type: 'String'
+		},
+		minimum: {
+			type: 'Number'
+		}
 	},
-	userId: {
-		type: 'ObjectId'
-	},
-	clientId: {
-		type: 'ObjectId'
-	},
-	answer: {
-		type: 'String'
-	},
-	key: {
-		type: 'String'
-	},
-	dateCreated: {
-		type: 'Number'
-	},
-	dateUpdated: {
-		type: 'Number'
-	},
-	lastCreatedBy: {
-		type: 'String'
-	},
-	lastUpdatedBy: {
-		type: 'String'
+	hairColor: {
+		enum: {
+			type: [
+				'String'
+			]
+		},
+		type: {
+			type: 'String'
+		}
 	}
 }) 
 
