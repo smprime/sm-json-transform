@@ -30,7 +30,7 @@ Schema/${yourSchema}:
 }
 ```
 
-Output:!!!!
+Output:
 ```ts
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
@@ -72,6 +72,7 @@ const ${yourSchema} = Schema({
 
 module.exports = mongoose.model(${yourSchema}, ${yourSchema}, ${yourSchema});
 ```
+... and much, much more!!
 
 ## Installation
 
