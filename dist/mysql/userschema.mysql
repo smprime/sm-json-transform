@@ -1,0 +1,15 @@
+CREATE TABLE generic (
+  id TEXT,
+  companyId TEXT,
+  appId TEXT,
+  questionId TEXT,
+  userId TEXT,
+  clientId TEXT,
+  answer TEXT,
+  key TEXT,
+  dateCreated INT,
+  dateUpdated INT,
+  lastCreatedBy TEXT,
+  lastUpdatedBy TEXT,
+  PRIMARY KEY (id)
+);
