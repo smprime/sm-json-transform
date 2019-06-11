@@ -86,20 +86,35 @@ npm install sm-json-transform --save
 ## Usage
 
 ```js
-import { transform } from 'sm-json-transform'
+import { gulpAutoSchema } from 'sm-json-transform'
+const paths = {
+    files: ['src/schemas/*.js*'],
+    dest: ['dist/'],
+    tssrc: ['src/interfaces']
+};
 
 // compile from file
-transform()
-  
-
-// or, compile a JS object
-transform()
+gulp.task('json2ts', () =>
+    gulp.src(paths.files)
+        .pipe(gulpAutoSchema('JsonTs'))
+        .pipe(rename(paths => paths.extname = '.ts'))
+        .pipe(gulp.dest(paths.tssrc))
+);
 ```
 
+## Develop
+
+`npm run watch`
+
+`npm run dev`
 
 ## Build
 
 `npm run build`
+
+## Production
+
+`npm run prod`
 
 ## Tests
 
