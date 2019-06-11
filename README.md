@@ -8,26 +8,20 @@ Gulp JSON Transformations
 Schema/${yourSchema}:
 ```json
 {
-  "firstName": {
-    "type": "string"
-  },
-  "lastName": {
-    "type": "string"
-  },
-  "age": {
-    "description": "Age in years",
-    "type": "integer",
-    "minimum": 0
-  },
-  "hairColor": {
-    "enum": [
-      "black",
-      "brown",
-      "blue"
-    ],
-    "type": "string"
-  }
+  "companyId": "54495ad94c934721ede76d90",
+  "appId": "54495ad94c934721ede76d90",
+  "questionId": "54495ad94c934721ede76d90",
+  "adminId": "54495ad94c934721ede76d90",
+  "userId": "54495ad94c934721ede76d90",
+  "clientId": "54495ad94c934721ede76d90",
+  "answer": "Test",
+  "key": "test",
+  "dateCreated": 1559534398414,
+  "dateUpdated": 1559534398414,
+  "lastCreatedBy": "Jason",
+  "lastUpdatedBy": "Jason"
 }
+
 ```
 
 Output:
@@ -36,41 +30,46 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const { ObjectId } = Schema.Types;
 
-const ${yourSchema} = Schema({
-	firstName: {
-		type: {
-			type: 'String'
-		}
+const userschemaSchema = Schema({
+	companyId: {
+		type: 'ObjectId'
 	},
-	lastName: {
-		type: {
-			type: 'String'
-		}
+	appId: {
+		type: 'ObjectId'
 	},
-	age: {
-		description: {
-			type: 'String'
-		},
-		type: {
-			type: 'String'
-		},
-		minimum: {
-			type: 'Number'
-		}
+	questionId: {
+		type: 'ObjectId'
 	},
-	hairColor: {
-		enum: {
-			type: [
-				'String'
-			]
-		},
-		type: {
-			type: 'String'
-		}
+	adminId: {
+		type: 'ObjectId'
+	},
+	userId: {
+		type: 'ObjectId'
+	},
+	clientId: {
+		type: 'ObjectId'
+	},
+	answer: {
+		type: 'String'
+	},
+	key: {
+		type: 'String'
+	},
+	dateCreated: {
+		type: 'Number'
+	},
+	dateUpdated: {
+		type: 'Number'
+	},
+	lastCreatedBy: {
+		type: 'String'
+	},
+	lastUpdatedBy: {
+		type: 'String'
 	}
 }) 
 
-module.exports = mongoose.model(${yourSchema}, ${yourSchema}, ${yourSchema});
+module.exports = mongoose.model('userschema', userschemaSchema, 'userschema');
 ```
 ... and much, much more!!
 
